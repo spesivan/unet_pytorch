@@ -12,6 +12,10 @@ from model import build_unet
 from loss import DiceLoss, DiceBCELoss
 from utils import seeding, create_dir, epoch_time
 
+epochssss = []
+train_losses = []
+valid_losses = []
+
 def train(model, loader, optimizer, loss_fn, device):
     epoch_loss = 0.0
 
@@ -120,6 +124,24 @@ if __name__ == "__main__":
         epoch_mins, epoch_secs = epoch_time(start_time, end_time)
 
         data_str = f'Epoch: {epoch+1:02} | Epoch Time: {epoch_mins}m {epoch_secs}s\n'
+        epochssss.append(epoch+1)
         data_str += f'\tTrain Loss: {train_loss:.3f}\n'
+        train_losses.append(train_loss)
         data_str += f'\t Val. Loss: {valid_loss:.3f}\n'
+        valid_losses.append(valid_loss)
         print(data_str)
+
+
+
+
+import matplotlib.pyplot as plt
+
+# Eğitim ve doğrulama kayıplarını çizdirme
+plt.figure(figsize=(10, 5))
+plt.plot(epochssss, train_losses, label='Training Loss')
+plt.plot(epochssss, valid_losses, label='Validation Loss')
+plt.xlabel('Epochs')
+plt.ylabel('Loss')
+plt.legend()
+plt.title('Training and Validation Loss Over Epochs')
+plt.show()
